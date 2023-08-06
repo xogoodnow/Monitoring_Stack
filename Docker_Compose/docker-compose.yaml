@@ -8,6 +8,7 @@ volumes:
   prometheus_data: {}
   grafana_data: {}
 
+
 services:
   node-exporter:
     image: prom/node-exporter:latest
@@ -45,6 +46,40 @@ services:
       - "9090:9090"
     networks:
       - monitoring
+
+
+  vmstorage:
+    container_name: vmstorage
+    image: victoriametrics/vmstorage:latest
+#    ports:
+#      - 8482
+#      - 8400
+#      - 8401
+    volumes:
+      - ./vmstorage:/storage
+    command:
+      - '--storageDataPath=/storage'
+    restart: always
+
+
+  vmselect:
+    image: victoriametrics/vmselect:latest
+    container_name: vmselect
+    restart: unless-stopped
+    depends_on: vmstorage
+    command:
+      - '--storageNode=vmstorage:8401'
+
+
+
+  vminsert:
+    image: victoriametrics/vminsert:latest
+    container_name: vminsert
+    restart: unless-stopped
+    depends_on: vmstorage
+    command:
+      - '--storageNode=vmstorage:8401'
+
 
   grafana:
     image: grafana/grafana:latest
