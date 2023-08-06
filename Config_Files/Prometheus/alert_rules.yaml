@@ -1,0 +1,30 @@
+groups:
+- name: alert_rules
+  rules:
+   - alert: InstanceDown
+     expr: up == 0
+     for: 1m
+
+- name: node_alerts
+  rules:
+  - alert: HighCpuUsage
+    expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+    for: 2m
+    annotations:
+      summary: "High CPU usage detected on instance {{ $labels.instance }}"
+      description: "CPU usage is above 80% for 2 minutes"
+
+  - alert: HighMemoryUsage
+    expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 80
+    for: 2m
+    annotations:
+      summary: "High memory usage detected on instance {{ $labels.instance }}"
+      description: "Memory usage is above 80% for 2 minutes"
+
+  - alert: LowDiskSpace
+    expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 20
+    for: 2m
+    annotations:
+      summary: "Low disk space detected on instance {{ $labels.instance }}"
+      description: "Disk space is below 20% for 2 minutes"
+

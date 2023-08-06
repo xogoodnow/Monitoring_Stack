@@ -33,7 +33,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     volumes:
-      - $PWD/../Config_Files/Prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - $PWD/../Config_Files/Prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
