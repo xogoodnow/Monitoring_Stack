@@ -26,3 +26,16 @@ scrape_configs:
     static_configs:
       - targets: ['node-exporter:9100']
 
+remote_write:
+  - url: http://vminsert:8428/api/v1/write
+
+    remote_timeout: 30s
+    queue_config:
+      capacity: 20000
+      max_shards: 30
+      min_shards: 1
+      max_samples_per_send: 1000
+      batch_send_deadline: 5s
+      min_backoff: 10ms
+      max_backoff: 1000ms
+
