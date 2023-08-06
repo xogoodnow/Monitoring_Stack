@@ -13,12 +13,12 @@ receivers:
 
   - name: 'email'
     email_configs:
-    - to: '{{ALERTMANAGER_SMTP_TO}}'
-      from: '{{ALERTMANAGER_SMTP_FROM}}'
-      smarthost: '{{ALERTMANAGER_SMTP_HOST}}'
-      auth_username: '{{ALERTMANAGER_SMTP_USERNAME}}'
-      auth_identity: '{{ALERTMANAGER_SMTP_USERNAME}}'
-      auth_password: '{{ALERTMANAGER_SMTP_PASSWORD}}'
+    - to: '${ALERTMANAGER_SMTP_TO}'
+      from: '${ALERTMANAGER_SMTP_FROM}'
+      smarthost: '${ALERTMANAGER_SMTP_HOST}'
+      auth_username: '${ALERTMANAGER_SMTP_USERNAME}'
+      auth_identity: '${ALERTMANAGER_SMTP_USERNAME}'
+      auth_password: '${ALERTMANAGER_SMTP_PASSWORD}'
       send_resolved: true
 
 inhibit_rules:
