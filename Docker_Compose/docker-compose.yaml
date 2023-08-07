@@ -60,6 +60,8 @@ services:
     command:
       - '--storageDataPath=/storage'
     restart: always
+    networks:
+      - monitoring
 
 
   vmselect:
@@ -70,6 +72,11 @@ services:
       - vmstorage
     command:
       - '--storageNode=vmstorage:8401'
+#    ports:
+#      - "8481:8481"
+    networks:
+      - monitoring
+
 
 
 
@@ -77,11 +84,17 @@ services:
     image: victoriametrics/vminsert:latest
     container_name: vminsert
     restart: unless-stopped
+
     depends_on:
       - "vmstorage"
 
     command:
-      - '--storageNode=vmstorage:8401'
+      - '--storageNode=vmstorage:8400'
+      - '--insert.maxQueueDuration=2m' # increase this as needed
+      - '--maxConcurrentInserts=16' # increase this as needed
+    networks:
+      - monitoring
+
 
 
   grafana:
