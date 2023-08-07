@@ -64,6 +64,23 @@ services:
       - monitoring
 
 
+  vmstorage-backup:
+    container_name: vmstorage-backup
+    image: victoriametrics/vmstorage:latest
+#    ports:
+#      - 8482
+#      - 8400
+#      - 8401
+    volumes:
+      - ./vmstorage-backup:/storage
+    command:
+      - '--storageDataPath=/storage'
+    restart: always
+    networks:
+      - monitoring
+
+
+
   vmselect:
     image: victoriametrics/vmselect:latest
     container_name: vmselect
@@ -72,12 +89,10 @@ services:
       - vmstorage
     command:
       - '--storageNode=vmstorage:8401'
-#    ports:
+      - '--storageNode=vmstorage-backup:8401'#    ports:
 #      - "8481:8481"
     networks:
       - monitoring
-
-
 
 
   vminsert:
@@ -90,6 +105,7 @@ services:
 
     command:
       - '--storageNode=vmstorage:8400'
+      - '--storageNode=vmstorage-backup:8400'
       - '--insert.maxQueueDuration=2m' # increase this as needed
       - '--maxConcurrentInserts=16' # increase this as needed
     networks:
