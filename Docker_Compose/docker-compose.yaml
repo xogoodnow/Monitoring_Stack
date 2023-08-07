@@ -66,7 +66,8 @@ services:
     image: victoriametrics/vmselect:latest
     container_name: vmselect
     restart: unless-stopped
-    depends_on: vmstorage
+    depends_on:
+      - vmstorage
     command:
       - '--storageNode=vmstorage:8401'
 
@@ -76,7 +77,9 @@ services:
     image: victoriametrics/vminsert:latest
     container_name: vminsert
     restart: unless-stopped
-    depends_on: vmstorage
+    depends_on:
+      - "vmstorage"
+
     command:
       - '--storageNode=vmstorage:8401'
 
