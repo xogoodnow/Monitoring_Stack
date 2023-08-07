@@ -19,10 +19,14 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['prometheus:9090']
-  - job_name: 'node'
+  - job_name: 'node_local'
     scrape_interval: 5s
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets:
+          - node-exporter:9100
+          #- {IP_Of_Remote_Exporter}:9100
+
+
 
 remote_write:
   - url: http://vminsert:8480/insert/0/prometheus
