@@ -94,7 +94,6 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
     ports:
       - "3000:3000"
-      -
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
