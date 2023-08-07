@@ -1,9 +1,5 @@
 version: '3.8'
 
-networks:
-  monitoring:
-    driver: bridge
-
 volumes:
   prometheus_data: {}
   grafana_data: {}
@@ -25,8 +21,6 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     ports:
       - "9100:9100"
-    networks:
-      - monitoring
 
   prometheus:
     image: prom/prometheus:latest
@@ -44,40 +38,21 @@ services:
       - '--web.enable-lifecycle'
     ports:
       - "9090:9090"
-    networks:
-      - monitoring
 
 
   vmstorage:
     container_name: vmstorage
     image: victoriametrics/vmstorage:latest
-#    ports:
+    ports:
 #      - 8482
-#      - 8400
-#      - 8401
+      - "8400:8400" #for vminsert
+      - "8401:8401" #for vmselect
     volumes:
       - ./vmstorage:/storage
     command:
       - '--storageDataPath=/storage'
     restart: always
-    networks:
-      - monitoring
 
-
-  vmstorage-backup:
-    container_name: vmstorage-backup
-    image: victoriametrics/vmstorage:latest
-#    ports:
-#      - 8482
-#      - 8400
-#      - 8401
-    volumes:
-      - ./vmstorage-backup:/storage
-    command:
-      - '--storageDataPath=/storage'
-    restart: always
-    networks:
-      - monitoring
 
 
 
@@ -89,10 +64,7 @@ services:
       - vmstorage
     command:
       - '--storageNode=vmstorage:8401'
-      - '--storageNode=vmstorage-backup:8401'#    ports:
-#      - "8481:8481"
-    networks:
-      - monitoring
+      #- '--storageNode={IP_Of_Other_Mon}:8401'
 
 
   vminsert:
@@ -105,11 +77,8 @@ services:
 
     command:
       - '--storageNode=vmstorage:8400'
-      - '--storageNode=vmstorage-backup:8400'
       - '--insert.maxQueueDuration=2m' # increase this as needed
       - '--maxConcurrentInserts=16' # increase this as needed
-    networks:
-      - monitoring
 
 
 
@@ -125,8 +94,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
     ports:
       - "3000:3000"
-    networks:
-      - monitoring
+      -
   alertmanager:
     image: prom/alertmanager:latest
     container_name: alertmanager
@@ -139,5 +107,3 @@ services:
       - "9093:9093"
     env_file:
       - .env
-    networks:
-      - monitoring
