@@ -3,11 +3,19 @@ modules:
     prober: http
     timeout: 5s
     http:
+      no_follow_redirects: false
+      preferred_ip_protocol: "ip4"
       method: GET
 
-  icmp_test:
+  icmp_ipv4:
     prober: icmp
     timeout: 5s
     icmp:
-      preferred_ip_protocol: ip4
+      preferred_ip_protocol: "ip4"
+
+  icmp_ipv6:
+    prober: icmp
+    timeout: 5s
+    icmp:
+      preferred_ip_protocol: "ip6"
 
