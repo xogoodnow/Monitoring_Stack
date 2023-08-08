@@ -28,6 +28,37 @@ scrape_configs:
           - {Remote_Server_Hostname}:9100
 #Keep in mind that you should define the IP address of each host in the /etc/hosts file
 
+  - job_name: 'blackbox_outer_http_health'
+   metrics_path: /probe
+   params:
+     module: [http_xxx]
+   scrape_interval: 5s
+   scrape_timeout: 4s
+   static_configs:
+     - targets:
+       - google.com
+       - github.com
+       - k8s.io
+
+   relabel_configs:
+     - source_labels: [__address__]
+       target_label: __param_target
+     - source_labels: [__param_target]
+       target_label: instance
+     - target_label: __address__
+       replacement: {outervpn}:9115  # Replace with the address of your blackbox exporter
+
+
+  - job_name: 'blackbox_icmp'
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    static_configs:
+      - targets:
+        - {ipv4_inner_vpn}
+        - {ipv6_inner_vpn}
+
+
 
 remote_write:
   - url: http://vminsert:8480/insert/0/prometheus

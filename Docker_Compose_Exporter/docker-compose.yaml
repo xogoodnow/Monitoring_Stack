@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   node-exporter:
     image: prom/node-exporter:latest
@@ -14,6 +13,17 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-
     network_mode: host
 
+  blackbox:
+    container_name: blackbox
+    image: prom/blackbox-exporter:latest
+    ports:
+    - "9115:9115"
+    command:
+    - '--config.file=/etc/blackbox/blackbox.yaml'
+    volumes:
+    - $PWD/../Config_Files/Blackbox/:/etc/blackbox/
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
