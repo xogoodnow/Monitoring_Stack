@@ -27,11 +27,11 @@ services:
     container_name: prometheus
     restart: unless-stopped
     volumes:
-      - $PWD/../Config_Files/Prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - $PWD/../Config_Files/Prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
       - $PWD/../Config_Files/Prometheus/alert_rules.yaml:/etc/prometheus/alert_rules.yaml
       - prometheus_data:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--config.file=/etc/prometheus/prometheus.yaml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
