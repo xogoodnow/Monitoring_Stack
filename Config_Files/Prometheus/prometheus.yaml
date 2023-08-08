@@ -23,6 +23,7 @@ scrape_configs:
       - targets:
           - mon1:9100
           - vpnv4:9100
+          - mon2:9100
     # Keep in mind that you should define the IP address of each host in the /etc/hosts file
 
   - job_name: 'blackbox_outer_http_health'
@@ -78,6 +79,20 @@ scrape_configs:
         replacement: vpnv4:9115  # Replace with the address of your blackbox exporter
 
 
+  - job_name: 'blackbox_icmp_v4-mon2'
+    metrics_path: /probe
+    params:
+      module: [icmp_ipv4]
+    static_configs:
+      - targets:
+          - mikrotik-1-v4
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: mon2:9115  # Replace with the address of your blackbox exporter
 
 
 
