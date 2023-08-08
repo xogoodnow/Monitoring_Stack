@@ -17,7 +17,7 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['prometheus:9090']
-  - job_name: 'node_local'
+  - job_name: 'node_exporter'
     scrape_interval: 5s
     static_configs:
       - targets:
