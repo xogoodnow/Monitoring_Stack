@@ -27,3 +27,4 @@ services:
     cap_add:
       - NET_RAW
       - NET_ADMIN
+#      - ALL
