@@ -51,3 +51,14 @@ groups:
         annotations:
           summary: HTTP status  (instance {{ $labels.instance }})
           description: "HTTP status code not 200\n on instance {{ $labels.instance }}  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+
+      - alert: High TCP connection
+        expr: sum(node_netstat_Tcp_CurrEstab) > 300
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: TCP connection status  (instance {{ $labels.instance }})
+          description: "Experiencing high TCP demand  on instance {{ $labels.instance }} "
+
