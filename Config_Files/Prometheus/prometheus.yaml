@@ -26,7 +26,7 @@ scrape_configs:
           - mon2:9100
     # Keep in mind that you should define the IP address of each host in the /etc/hosts file
 
-  - job_name: 'blackbox_outer_http_health'
+  - job_name: 'HTTP_Endpoints_vpnv4'
     metrics_path: /probe
     params:
       module: [http_xxx]
@@ -47,7 +47,7 @@ scrape_configs:
       - target_label: __address__
         replacement: vpnv4:9115  # Replace with the address of your blackbox exporter
 
-  - job_name: 'blackbox_icmp_v4'
+  - job_name: 'vpnv4_icmp_v4'
     metrics_path: /probe
     params:
       module: [icmp_ipv4]
@@ -63,7 +63,7 @@ scrape_configs:
         replacement: vpnv4:9115  # Replace with the address of your blackbox exporter
 
 
-  - job_name: 'blackbox_icmp_v6'
+  - job_name: 'vpnv4_icmp_v6'
     metrics_path: /probe
     params:
       module: [icmp_ipv6]
@@ -79,7 +79,7 @@ scrape_configs:
         replacement: vpnv4:9115  # Replace with the address of your blackbox exporter
 
 
-  - job_name: 'blackbox_icmp_v4-mon2'
+  - job_name: 'mon2_icmp'
     metrics_path: /probe
     params:
       module: [icmp_ipv4]
