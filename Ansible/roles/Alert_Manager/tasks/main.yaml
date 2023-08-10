@@ -1,0 +1,29 @@
+---
+
+- name: check connectivity
+
+
+- name: Pull the image for Alert manager
+  docker_image:
+    name: prom/alertmanager:latest
+    source: pull
+
+
+
+
+- name: Run the Alert manager container
+  docker_container:
+    name: alert-manager
+    image: prom/alertmanager:latest
+    restart_policy: unless-stopped
+    volumes:
+      - /root/Config_Files/Alert_Manager/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yaml'
+    exposed_ports:
+      - "9093:9093"
+    env:
+      - ADMIN_USER: admin_user
+      - ADMIN_PASSWORD: admin_password
+
+
