@@ -1,0 +1,37 @@
+---
+- name: setting up k8s cluster
+  hosts: all
+  become: true
+  tasks:
+    - name: Settign the basis on all nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Pre_Setup
+        - $PWD/roles/Install_Docker
+
+
+    - name: Setting up on Monitoring nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Alert_Manager
+        - $PWD/roles/Config_Files
+        - $PWD/roles/Prometheus
+        - $PWD/roles/VM_insert
+        - $PWD/roles/VM_select
+        - $PWD/roles/VM_storage
+        - $PWD/roles/Grafana
+        - $PWD/roles/Node_Exporter
+      when: "'monitoring' in mode"
+
+
+    - name: Set up on target nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Config_Files
+        - $PWD/roles/Node_Exporter
+        - $PWD/roles/Blackbox_Exporter
+      when: "'target' in mode"
+
