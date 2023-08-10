@@ -1,6 +1,8 @@
 ---
 
 - name: check connectivity
+  ping:
+    data: alive
 
 
 - name: Pull the image for Alert manager
