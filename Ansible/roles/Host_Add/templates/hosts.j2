@@ -1,0 +1,11 @@
+
+{% for host in groups['all'] %}
+{% if hostvars[host]['mode'] == 'monitoring' %}
+{{ hostvars[host]['ansible_host'] }}  {{ host }}
+
+{% elif hostvars[host]['mode'] == 'target' %}
+{{ hostvars[host]['ansible_host'] }}  {{ host }}
+
+{% endif %}
+{% endfor %}
+
