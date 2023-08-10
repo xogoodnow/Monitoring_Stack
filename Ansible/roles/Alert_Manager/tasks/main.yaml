@@ -22,7 +22,7 @@
       - /root/Config_Files/Alert_Manager/:/etc/alertmanager/
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yaml'
-    exposed_ports:
+    published_ports:
       - "9093:9093"
 
 

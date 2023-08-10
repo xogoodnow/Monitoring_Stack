@@ -20,7 +20,7 @@
     volumes:
       - ./vmstorage:/storage
 
-    exposed_ports:
+    published_ports:
       - "8400:8400"
       - "8401:8401"
 

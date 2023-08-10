@@ -18,7 +18,6 @@
     command:
       - '--storageNode=vmstorage:8401'
     state: started
-    network_mode: host
 
 
 

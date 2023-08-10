@@ -23,7 +23,7 @@
 
     volumes:
       - /root/Config_Files/Blackbox/:/etc/blackbox/
-    exposed_ports:
+    published_ports:
       - "9115:9115"
     capabilities:
       - NET_RAW

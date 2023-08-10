@@ -16,7 +16,7 @@
     volumes:
       - grafana_data:/var/lib/grafana
       - /root/Config_Files/Grafana/:/etc/grafana/
-    exposed_ports:
+    published_ports:
       - "3000:3000"
     env:
       ADMIN_USER: admin_user

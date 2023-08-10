@@ -27,7 +27,7 @@
       - /root/Config_Files/Prometheus/alert_rules.yaml:/etc/prometheus/alert_rules.yaml
       - prometheus_data:/prometheus
 
-    exposed_ports:
+    published_ports:
       - "9090:9090"
 
 
