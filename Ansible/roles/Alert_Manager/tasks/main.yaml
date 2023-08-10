@@ -22,8 +22,6 @@
       - '--config.file=/etc/alertmanager/alertmanager.yaml'
     exposed_ports:
       - "9093:9093"
-    env:
-      - ADMIN_USER: admin_user
-      - ADMIN_PASSWORD: admin_password
+
 
 
