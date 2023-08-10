@@ -17,16 +17,26 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['prometheus:9090']
+
+
   - job_name: 'node_exporter'
     scrape_interval: 5s
     static_configs:
       - targets:
-          - mon1:9100
-          - vpnv4:9100
-          - mon2:9100
-    # Keep in mind that you should define the IP address of each host in the /etc/hosts file
+ {% for host in groups['all'] %}
+ {% if hostvars[host]['mode'] == 'monitoring' %}
 
-  - job_name: 'HTTP_Endpoints_vpnv4'
+          - {{ host }}:9100
+{% elif hostvars[host]['mode'] == 'target' %}
+          - {{ host }}:9100
+{% endif %}
+{% endfor %}
+
+
+ {% for host in groups['all'] %}
+ {% if hostvars[host]['mode'] == 'monitoring' %}
+
+  - job_name: 'HTTP_Endpoints_"{{ host }}"'
     metrics_path: /probe
     params:
       module: [http_xxx]
@@ -45,9 +55,9 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: vpnv4:9115  # Replace with the address of your blackbox exporter
+        replacement: {{ host }}:9115  # Replace with the address of your blackbox exporter
 
-  - job_name: 'vpnv4_icmp_v4'
+  - job_name: '"{{ host }}"_icmp_v4'
     metrics_path: /probe
     params:
       module: [icmp_ipv4]
@@ -60,10 +70,10 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: vpnv4:9115  # Replace with the address of your blackbox exporter
+        replacement: {{ host }}:9115  # Replace with the address of your blackbox exporter
 
 
-  - job_name: 'vpnv4_icmp_v6'
+  - job_name: '{{ host }}_icmp_v6'
     metrics_path: /probe
     params:
       module: [icmp_ipv6]
@@ -76,10 +86,15 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: vpnv4:9115  # Replace with the address of your blackbox exporter
+        replacement: {{ host }}:9115  # Replace with the address of your blackbox exporter
+{% endif %}
+{% endfor %}
 
 
-  - job_name: 'mon2_icmp'
+ {% for host in groups['all'] %}
+{% if hostvars[host]['mode'] == 'target' %}
+
+  - job_name: '{{ host }}_icmp'
     metrics_path: /probe
     params:
       module: [icmp_ipv4]
@@ -92,8 +107,10 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: mon2:9115  # Replace with the address of your blackbox exporter
+        replacement: {{ host }}:9115  # Replace with the address of your blackbox exporter
 
+{% endif %}
+{% endfor %}
 
 
 

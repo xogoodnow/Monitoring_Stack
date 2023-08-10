@@ -38,7 +38,15 @@
     dest: /root/Config_Files/Grafana
 
 
-- name: Copy the Prometheus conf file
+- name: Copy the Grafana conf file
   copy:
-    src: ../files/prometheus.yaml
+    src: ../files/alert_rules.yaml
     dest: /root/Config_Files/Prometheus/
+
+
+- name: Generate the Prometheus conf file
+  template:
+    src: templates/prometheus.yaml.j2
+    dest: /root/Config_Files/Prometheus/prometheus.yaml
+
+
