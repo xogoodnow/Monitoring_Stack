@@ -1,0 +1,32 @@
+---
+
+
+- name: Check ansible connectivity
+  ping:
+    data: alive
+
+- name: pull the required image for Black Box
+  docker_image:
+    name: prom/blackbox-exporter:latest
+    source: pull
+
+
+- name: Run the container for Blackbox
+  docker_container:
+    name: blackbox
+    image: prom/blackbox-exporter:latest
+    restart_policy: unless-stopped
+    state: started
+    command:
+      - '--config.file=/etc/blackbox/blackbox.yaml'
+    network_mode: host
+
+    volumes:
+      - /root/Config_Files/Blackbox/:/etc/blackbox/
+    exposed_ports:
+      - "9115:9115"
+    capabilities:
+      - NET_RAW
+      - NET_ADMIN
+
+
