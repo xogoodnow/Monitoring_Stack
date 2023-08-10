@@ -13,9 +13,6 @@
     source: pull
 
 
-
-- name: Crea
-
 - name: Run the container for Node Exporter
   docker_container:
     name: node-exporter
