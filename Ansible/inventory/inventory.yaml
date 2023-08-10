@@ -1,0 +1,18 @@
+all:
+    children:
+        servers:
+            hosts:
+                monitoring-1:
+                    ansible_host:
+                    ansible_user: root
+                    mode: 'monitoring'
+                monitoring-2:
+                    ansible_host:
+                    ansible_user: root
+                    mode: 'monitoring'
+
+                monitoring-3:
+                    ansible_host:
+                    ansible_user: root
+                    mode: 'target'
+
