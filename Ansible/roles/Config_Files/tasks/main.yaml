@@ -2,7 +2,7 @@
 
 - name: Create a directory for config files
   file:
-    path: /root/Config_Files/"{{ item }}"
+    path: /root/Config_Files/{{ item }}
     state: directory
     group: root
     owner: root
@@ -16,7 +16,7 @@
 
 - name: Copy the Alertmanager conf file
   copy:
-    src: ../files/"{{ item }}"
+    src: files/{{ item }}
     dest: /root/Config_Files/Alert_Manager/
 
   with_items:
@@ -27,20 +27,21 @@
 
 - name: Copy the Blackbox conf file
   copy:
-    src: ../files/blackbox.yaml
+    src: files/blackbox.yaml
     dest: /root/Config_Files/Blackbox/
 
 
 
 - name: Copy the Grafana conf file
   copy:
-    src: ../files/grafana.ini
+    src: files/grafana.ini
     dest: /root/Config_Files/Grafana
+
 
 
 - name: Copy the Grafana conf file
   copy:
-    src: ../files/alert_rules.yaml
+    src: files/alert_rules.yaml
     dest: /root/Config_Files/Prometheus/
 
 
@@ -48,5 +49,6 @@
   template:
     src: templates/prometheus.yaml.j2
     dest: /root/Config_Files/Prometheus/prometheus.yaml
+
 
 
