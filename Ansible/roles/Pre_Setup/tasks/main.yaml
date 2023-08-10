@@ -25,6 +25,7 @@
       - ca-certificates
       - curl
       - resolvconf
+      - stress
     state: present
 
 
