@@ -12,7 +12,7 @@
 
 - name: Run the container for VM_storage
   docker_container:
-    name: vm-storage
+    name: vmstorage
     image: victoriametrics/vmstorage:latest
     restart_policy: unless-stopped
     state: started

@@ -1,20 +1,7 @@
 ---
 
-- name: set resolve conf config
-  template:
-    dest: /etc/resolvconf/resolv.conf.d/head
-    src: templates/hosts.j2
-
-
 - name: edit resolv.conf file
   template:
-    dest: /etc/resolv.conf
+    dest:  /etc/hosts
     src: templates/hosts.j2
-
-
-- name: enable resolvconf service
-  systemd:
-    name: resolvconf
-    state: started
-    enabled: yes
 

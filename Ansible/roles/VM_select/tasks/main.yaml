@@ -12,7 +12,7 @@
 
 - name: Run the container for VM_select
   docker_container:
-    name: vm-select
+    name: vmselect
     image: victoriametrics/vmselect:latest
     restart_policy: unless-stopped
     command:

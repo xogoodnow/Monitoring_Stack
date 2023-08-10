@@ -15,7 +15,7 @@
 
 - name: Run the Alert manager container
   docker_container:
-    name: alert-manager
+    name: alertmanager
     image: prom/alertmanager:latest
     restart_policy: unless-stopped
     volumes:

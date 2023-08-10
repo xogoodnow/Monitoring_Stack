@@ -12,7 +12,7 @@
 
 - name: Run the container for VM_Insert
   docker_container:
-    name: vm-insert
+    name: vminsert
     image: victoriametrics/vminsert:latest
     restart_policy: unless-stopped
 
@@ -22,8 +22,6 @@
       - '--maxConcurrentInserts=16' # increase this as needed
 
     state: started
-    network_mode: host
-
 
 
 
