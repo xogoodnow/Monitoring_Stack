@@ -1,6 +1,3 @@
----
-
-
 - name: Check ansible connectivity
   ping:
     data: alive
@@ -10,22 +7,18 @@
     name: grafana/grafana:latest
     source: pull
 
-
 - name: Run the container for Grafana
   docker_container:
     name: grafana
     image: grafana/grafana:latest
     restart_policy: unless-stopped
     state: started
-
     volumes:
       - grafana_data:/var/lib/grafana
       - /root/Config_Files/Grafana/:/etc/grafana/
     exposed_ports:
       - "3000:3000"
     env:
-      - ADMIN_USER: admin_user
-      - ADMIN_PASSWORD: admin_password
-
-
+      ADMIN_USER: admin_user
+      ADMIN_PASSWORD: admin_password
 

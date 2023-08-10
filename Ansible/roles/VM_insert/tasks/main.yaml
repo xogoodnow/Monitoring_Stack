@@ -22,6 +22,7 @@
       - '--maxConcurrentInserts=16' # increase this as needed
 
     state: started
+    network_mode: host
 
 
 

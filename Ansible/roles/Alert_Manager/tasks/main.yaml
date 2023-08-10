@@ -19,7 +19,7 @@
     image: prom/alertmanager:latest
     restart_policy: unless-stopped
     volumes:
-      - /root/Config_Files/Alert_Manager/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
+      - /root/Config_Files/Alert_Manager/:/etc/alertmanager/
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yaml'
     exposed_ports:
