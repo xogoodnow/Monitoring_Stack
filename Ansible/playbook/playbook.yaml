@@ -23,6 +23,7 @@
         - $PWD/roles/VM_storage
         - $PWD/roles/Grafana
         - $PWD/roles/Node_Exporter
+        - $PWD/roles/Host_Add
       when: "'monitoring' in mode"
 
 
