@@ -1,0 +1,28 @@
+---
+
+- name: Check ansible connectivity
+  ping:
+    data: alive
+
+- name: pull the required image for VM_Insert
+  docker_image:
+    name:  victoriametrics/vminsert:latest
+    source: pull
+
+
+- name: Run the container for VM_Insert
+  docker_container:
+    name: vm-insert
+    image: victoriametrics/vminsert:latest
+    restart_policy: unless-stopped
+
+    command:
+      - '--storageNode=vmstorage:8400'
+      - '--insert.maxQueueDuration=2m' # increase this as needed
+      - '--maxConcurrentInserts=16' # increase this as needed
+
+    state: started
+
+
+
+
