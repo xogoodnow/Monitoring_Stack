@@ -1,0 +1,24 @@
+---
+
+- name: Check ansible connectivity
+  ping:
+    data: alive
+
+- name: pull the required image for VM_select
+  docker_image:
+    name:  victoriametrics/vmstorage:latest
+    source: pull
+
+
+- name: Run the container for VM_select
+  docker_container:
+    name: vm-select
+    image: victoriametrics/vmselect:latest
+    restart_policy: unless-stopped
+    command:
+      - '--storageNode=vmstorage:8401'
+    state: started
+
+
+
+
