@@ -1,0 +1,27 @@
+---
+
+- name: Check ansible connectivity
+  ping:
+    data: alive
+
+- name: pull the required image for VM_storage
+  docker_image:
+    name:  victoriametrics/vmstorage:latest
+    source: pull
+
+
+- name: Run the container for VM_storage
+  docker_container:
+    name: vm-storage
+    image: victoriametrics/vmstorage:latest
+    restart_policy: unless-stopped
+    state: started
+
+    volumes:
+      - ./vmstorage:/storage
+
+    exposed_ports:
+      - "8400:8400"
+      - "8401:8401"
+
+
