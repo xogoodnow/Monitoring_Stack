@@ -1,6 +1,5 @@
 ---
-
-- name: edit resolv.conf file
+- name: edit etc/hosts file
   template:
     dest:  /etc/hosts
     src: templates/hosts.j2
