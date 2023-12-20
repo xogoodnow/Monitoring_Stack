@@ -1,0 +1,10 @@
+name_server: 8.8.8.8
+vmagent_version: latest
+victoria_metrics_version: latest
+grafana_version: latest
+vmalert_version: latest
+alert_manager_version: latest
+node_exporter_version: latest
+grafana_admin_user: admin_user
+grafana_admin_password: admin_password
+compose_api_version: 3.8
