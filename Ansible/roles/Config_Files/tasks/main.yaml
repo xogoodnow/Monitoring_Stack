@@ -42,7 +42,7 @@
 
 - name: Copy the alert_rules for victoria metrics
   copy:
-    src: files/alert_manager/alert_rules.yaml
+    src: files/prometheus/alert_rules.yaml
     dest: /root/monitoring/victoria_metrics/alert_rules
 
 
