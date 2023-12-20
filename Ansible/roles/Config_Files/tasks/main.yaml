@@ -1,24 +1,33 @@
 ---
+- name: Check ansible connectivity
+  ping:
+    data: alive
 
-- name: Create a directory for config files
+
+- name: Create a directories
   file:
-    path: /root/Config_Files/{{ item }}
+    path: /root/{{ item }}
     state: directory
     group: root
     owner: root
     mode: 0755
   with_items:
-    - Alert_Manager
-    - Prometheus
-    - Grafana
-    - Blackbox
+    - monitoring
+    - monitoring/node_exporter
+    - monitoring/blackbox_exporter
+    - monitoring/victoria_metrics
+    - monitoring/victoria_metrics/alert_rules
+    - monitoring/victori_metrics/vmagent_data
+    - monitoring/victori_metrics/victoria_metrics_data
+    - monitoring/alert_manager
+    - monitoring/grafana
+
 
 
 - name: Copy the Alertmanager conf file
   copy:
-    src: files/{{ item }}
-    dest: /root/Config_Files/Alert_Manager/
-
+    src: files/alert_manager/{{ item }}
+    dest: /root/monitoring/alert_manager/
   with_items:
     - alertmanager.yaml
     - alertmanager_email.yaml
@@ -27,28 +36,26 @@
 
 - name: Copy the Blackbox conf file
   copy:
-    src: files/blackbox.yaml
-    dest: /root/Config_Files/Blackbox/
+    src: files/blackbox_exporter/blackbox.yaml
+    dest: /root/monitoring/blackbox_exporter/
 
 
-
-- name: Copy the Grafana conf file
+- name: Copy the alert_rules for victoria metrics
   copy:
-    src: files/grafana.ini
-    dest: /root/Config_Files/Grafana
+    src: files/alert_manager/alert_rules.yaml
+    dest: /root/monitoring/victoria_metrics/alert_rules
 
 
-
-- name: Copy the Grafana conf file
-  copy:
-    src: files/alert_rules.yaml
-    dest: /root/Config_Files/Prometheus/
+- name: Generate the Grafana conf file
+  template:
+    src: templates/grafana/grafana.ini.j2
+    dest: /root/monitoring/grafana/grafana.ini
 
 
 - name: Generate the Prometheus conf file
   template:
-    src: templates/prometheus.yaml.j2
-    dest: /root/Config_Files/Prometheus/prometheus.yaml
+    src: templates/prometheus/prometheus.yaml.j2
+    dest: /root/monitoring/victoria_metrics/prometheus.yaml
 
 
 
