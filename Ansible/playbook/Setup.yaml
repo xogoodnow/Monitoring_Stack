@@ -8,7 +8,7 @@
         file: "{{ playbook_dir }}/vars/{{ item }}"
       with_items:
         - "all.yaml"
-        
+
     - name: Settign the basis on all nodes
       include_role:
         name: "{{ item }}"
@@ -21,12 +21,12 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Alert_Manager
         - $PWD/roles/Config_Files
         - $PWD/roles/Victoriametrics_Stack
         - $PWD/roles/Grafana
         - $PWD/roles/Node_Exporter
         - $PWD/roles/Host_Add
+#        - $PWD/roles/Alert_Manager
 #        - $PWD/roles/VM_insert
 #        - $PWD/roles/VM_select
 #        - $PWD/roles/VM_storage
