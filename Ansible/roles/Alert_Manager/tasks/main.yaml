@@ -1,29 +1,37 @@
 ---
-
-- name: check connectivity
+- name: Check ansible connectivity
   ping:
     data: alive
 
 
-- name: Pull the image for Alert manager
-  docker_image:
-    name: prom/alertmanager:latest
-    source: pull
+- name: Create the required directories
+  file:
+    mode: 0777
+    path: "/root/{{ item }}"
+    owner: root
+    group: root
+    state: directory
+  with_items:
+    - monitoring
+    - monitoring/alert_manager
 
 
+- name: Set the docker compose file for each blackbox exporter
+  template:
+    src: "templates/docker-compose-alert_manager.yaml.j2"
+    dest: "/root/monitoring/alert_manager/docker-compose.yaml"
 
 
 - name: Run the Alert manager container
-  docker_container:
-    name: alertmanager
-    image: prom/alertmanager:latest
-    restart_policy: unless-stopped
-    volumes:
-      - /root/Config_Files/Alert_Manager/:/etc/alertmanager/
-    command:
-      - '--config.file=/etc/alertmanager/alertmanager.yaml'
-    published_ports:
-      - "9093:9093"
+  community.general.docker_compose:
+    project_src: "/root/monitoring/alert_manager/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
 
 
 
