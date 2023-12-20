@@ -1,0 +1,76 @@
+version: "{{ compose_api_version }}"
+services:
+
+### Vm_Agent ###
+  vmagent:
+    container_name: "vmagent-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    image: "victoriametrics/vmagent:{{ vmagent_version }}"
+    volumes:
+      - "/root/monitoring/victori_metrics/vmagent_data:/vmagentdata"
+      - "/root/monitoring/victori_metrics/prometheus.yaml:/etc/prometheus/prometheus.yaml"
+    restart: unless-stopped
+    command:
+      - "--promscrape.config=/etc/prometheus/prometheus.yaml"
+      - "--remoteWrite.url=http://localhost:8428/api/v1/write"
+      - "--promscrape.config.strictParse=false"
+    network_mode: host
+#    ports:
+#      - 8429:8429
+
+
+### Victoria_Metrics ###
+  victoriametrics:
+    container_name: "victoriametrics-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    image: "victoriametrics/victoria-metrics:{{ victoria_metrics_version }}"
+    volumes:
+      - "/root/monitoring/victori_metrics/victoria_metrics_data:/storage"
+    restart: unless-stopped
+    command:
+      - "--storageDataPath=/storage"
+      - "--opentsdbListenAddr=:4242"
+      - "--httpListenAddr=:8428"
+      - "--vmalert.proxyURL=http://localhost:8880"
+    network_mode: host
+#    ports:
+#      - 8428:8428
+#      - 8089:8089
+#      - 8089:8089/udp
+#      - 2003:2003
+#      - 2003:2003/udp
+#      - 4242:4242
+
+
+### Vm_Alert ###
+  vmalert:
+    container_name: "vmalert-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    image: "victoriametrics/vmalert:{{ vmalert_version }}"
+    volumes:
+      - "/root/monitoring/victori_metrics/alert_rules:/etc/alert_rules/"
+    restart: unless-stopped
+    command:
+      - "--datasource.url=http://localhost:8428/"
+      - "--remoteRead.url=http://localhost:8428/"
+      - "--remoteWrite.url=http://localhost:8428/"
+      - "--notifier.url=http://localhost:9093/"
+      - "--rule=/etc/alert_rules/*.yaml"
+      - "--external.url=http://localhost:3000"
+    network_mode: host
+#    ports:
+#      - 8880:8880
+
+
+### Alert_Manager ###
+  alert_manager:
+    container_name: "alert_manager-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    image: "prom/alertmanager:{{ alert_manager_version }}"
+    volumes:
+      - /root/monitoring/alert_manager/alertmanager.yaml:/config/alertmanager.yaml
+    restart: unless-stopped
+    command:
+      - "--config.file=/config/alertmanager.yaml"
+    network_mode: host
+#    ports:
+#      - 9093:9093
+
+
+
