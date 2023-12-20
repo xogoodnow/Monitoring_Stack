@@ -1,0 +1,15 @@
+version: "{{ compose_api_version }}"
+services:
+  alert-manager:
+    container_name: "alert-manager-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    image: "prom/alertmanager:{{ alert_manager_version }}"
+    volumes:
+      - "/root/monitoring/blackbox_exporter/:/etc/alertmanager/"
+
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yaml'
+
+    network_mode: host
+
+
