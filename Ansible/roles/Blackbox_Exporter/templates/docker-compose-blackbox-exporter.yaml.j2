@@ -1,0 +1,21 @@
+version: "{{ compose_api_version }}"
+services:
+  blackbox-exporter:
+    container_name: "blackbox-exporter-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    image: "prom/blackbox-exporter:{{ blackbox_exporter_version }}"
+    volumes:
+      - "/root/Config_Files/Blackbox/:/etc/blackbox/"
+
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/blackbox/blackbox.yaml'
+
+    network_mode: host
+    capabilities:
+      - NET_RAW
+      - NET_ADMIN
+
+
+
+
+
