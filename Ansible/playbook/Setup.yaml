@@ -3,6 +3,9 @@
   hosts: all
   become: true
   tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
     - name: Settign the basis on all nodes
       include_role:
         name: "{{ item }}"
@@ -17,13 +20,13 @@
       with_items:
         - $PWD/roles/Alert_Manager
         - $PWD/roles/Config_Files
-        - $PWD/roles/Prometheus
-        - $PWD/roles/VM_insert
-        - $PWD/roles/VM_select
-        - $PWD/roles/VM_storage
+        - $PWD/roles/Victoriametrics_Stack
         - $PWD/roles/Grafana
         - $PWD/roles/Node_Exporter
         - $PWD/roles/Host_Add
+#        - $PWD/roles/VM_insert
+#        - $PWD/roles/VM_select
+#        - $PWD/roles/VM_storage
       when: "'monitoring' in mode"
 
 
