@@ -1,24 +1,39 @@
+---
 - name: Check ansible connectivity
   ping:
     data: alive
 
-- name: pull the required image for Grafana
-  docker_image:
-    name: grafana/grafana:latest
-    source: pull
 
-- name: Run the container for Grafana
-  docker_container:
-    name: grafana
-    image: grafana/grafana:latest
-    restart_policy: unless-stopped
-    state: started
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - /root/Config_Files/Grafana/:/etc/grafana/
-    published_ports:
-      - "3000:3000"
-    env:
-      ADMIN_USER: admin_user
-      ADMIN_PASSWORD: admin_password
+- name: Create the required directories
+  file:
+    mode: 0777
+    path: "/root/{{ item }}"
+    owner: root
+    group: root
+    state: directory
+  with_items:
+    - monitoring
+    - monitoring/grafana
+    - monitoring/grafana/grafana_data
+
+
+- name: Set the docker compose file for each grafana
+  template:
+    src: "templates/docker-compose-grafana.yaml.j2"
+    dest: "/root/monitoring/grafana/docker-compose.yaml"
+
+
+- name: Run the Grafana container
+  community.general.docker_compose:
+    project_src: "/root/monitoring/grafana/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
+
+
+
 
