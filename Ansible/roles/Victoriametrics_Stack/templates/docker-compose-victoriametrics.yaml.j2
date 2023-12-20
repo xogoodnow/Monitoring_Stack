@@ -6,8 +6,8 @@ services:
     container_name: "vmagent-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
     image: "victoriametrics/vmagent:{{ vmagent_version }}"
     volumes:
-      - "/root/monitoring/victori_metrics/vmagent_data:/vmagentdata"
-      - "/root/monitoring/victori_metrics/prometheus.yaml:/etc/prometheus/prometheus.yaml"
+      - "/root/monitoring/victoria_metrics/vmagent_data:/vmagentdata"
+      - "/root/monitoring/victoria_metrics/prometheus.yaml:/etc/prometheus/prometheus.yaml"
     restart: unless-stopped
     command:
       - "--promscrape.config=/etc/prometheus/prometheus.yaml"
@@ -23,7 +23,7 @@ services:
     container_name: "victoriametrics-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
     image: "victoriametrics/victoria-metrics:{{ victoria_metrics_version }}"
     volumes:
-      - "/root/monitoring/victori_metrics/victoria_metrics_data:/storage"
+      - "/root/monitoring/victoria_metrics/victoria_metrics_data:/storage"
     restart: unless-stopped
     command:
       - "--storageDataPath=/storage"
@@ -45,7 +45,7 @@ services:
     container_name: "vmalert-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
     image: "victoriametrics/vmalert:{{ vmalert_version }}"
     volumes:
-      - "/root/monitoring/victori_metrics/alert_rules:/etc/alert_rules/"
+      - "/root/monitoring/victoria_metrics/alert_rules:/etc/alert_rules/"
     restart: unless-stopped
     command:
       - "--datasource.url=http://localhost:8428/"
