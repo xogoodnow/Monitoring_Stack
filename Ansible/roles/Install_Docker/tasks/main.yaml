@@ -54,12 +54,6 @@
 
 
 
-- name: pull haproxy latest image
-  docker_image:
-    name: haproxy:latest
-    source: pull
-
-
 
 
 
