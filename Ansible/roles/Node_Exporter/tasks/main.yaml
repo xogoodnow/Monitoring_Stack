@@ -6,30 +6,44 @@
     data: alive
 
 
+- name: Create the required directories
+  file:
+    mode: 0777
+    path: "/root/{{ item }}"
+    owner: root
+    group: root
+    state: directory
+  with_items:
+    - monitoring
+    - monitoring/node_exporter
 
-- name: pull the required image for Node Exporter
-  docker_image:
-    name: prom/node-exporter:latest
-    source: pull
+
+- name: Set the docker compose file for each node exporter
+  template:
+    src: "templates/docker-compose-node-exporter.yaml.j2"
+    dest: "/root/monitoring/node_exporter/docker-compose.yaml"
 
 
-- name: Run the container for Node Exporter
-  docker_container:
-    name: node-exporter
-    image: prom/node-exporter:latest
-    restart_policy: unless-stopped
-    state: started
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    network_mode: host
+- name: Run the node exporter
+  community.general.docker_compose:
+    project_src: "/root/monitoring/node_exporter/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
 
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
+
+
+
+
+
+
+
+
+
+
 
 
 
