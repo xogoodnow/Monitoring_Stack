@@ -1,0 +1,12 @@
+version: "{{ compose_api_version }}"
+services:
+  grafana:
+    container_name: "grafana-{{ inventory_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    image: "grafana/grafana:{{ grafana_version }}"
+    volumes:
+      - "/root/monitoring/grafana/grafana_data/:/var/lib/grafana/"
+      - "/root/monitoring/grafana/:/etc/grafana/"
+    restart: unless-stopped
+    network_mode: host
+
+
