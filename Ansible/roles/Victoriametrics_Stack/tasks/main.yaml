@@ -1,0 +1,54 @@
+---
+
+- name: Check ansible connectivity
+  ping:
+    data: alive
+
+
+- name: Create the required directories
+  file:
+    mode: 0777
+    path: "/root/{{ item }}"
+    owner: root
+    group: root
+    state: directory
+  with_items:
+    - monitoring/victoria_metrics
+    - monitoring/victoria_metrics/alert_rules
+    - monitoring/victori_metrics/vmagent_data
+    - monitoring/victori_metrics/victoria_metrics_data
+    - monitoring/alert_manager/
+
+
+- name: Set the docker compose file for each node exporter
+  template:
+    src: "templates/docker-compose-victoriametrics.yaml.j2"
+    dest: "/root/monitoring/victoria_metrics/docker-compose.yaml"
+
+
+- name: Set up the Victoria Metrics stack
+  community.general.docker_compose:
+    project_src: "/root/monitoring/victoria_metrics/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
