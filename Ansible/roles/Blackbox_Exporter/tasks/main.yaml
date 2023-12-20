@@ -1,32 +1,47 @@
 ---
-
-
 - name: Check ansible connectivity
   ping:
     data: alive
 
-- name: pull the required image for Black Box
-  docker_image:
-    name: prom/blackbox-exporter:latest
-    source: pull
+
+- name: Create the required directories
+  file:
+    mode: 0777
+    path: "/root/{{ item }}"
+    owner: root
+    group: root
+    state: directory
+  with_items:
+    - monitoring
+    - monitoring/blackbox_exporter
 
 
-- name: Run the container for Blackbox
-  docker_container:
-    name: blackbox
-    image: prom/blackbox-exporter:latest
-    restart_policy: unless-stopped
-    state: started
-    command:
-      - '--config.file=/etc/blackbox/blackbox.yaml'
-    network_mode: host
+- name: Set the docker compose file for each blackbox exporter
+  template:
+    src: "templates/docker-compose-blackbox-exporter.yaml.j2"
+    dest: "/root/monitoring/blackbox_exporter/docker-compose.yaml"
 
-    volumes:
-      - /root/Config_Files/Blackbox/:/etc/blackbox/
-    published_ports:
-      - "9115:9115"
-    capabilities:
-      - NET_RAW
-      - NET_ADMIN
+
+- name: Run the blackbox exporter
+  community.general.docker_compose:
+    project_src: "/root/monitoring/blackbox_exporter/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
+
+
+
+
+
+
+
+
+
+
+
 
 
