@@ -51,7 +51,7 @@
 - name: pause for docker to be ready
   pause:
     seconds: 15
-    
+
 - name:
 - name: install dockerpy
   pip:
