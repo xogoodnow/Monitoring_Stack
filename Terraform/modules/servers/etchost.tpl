@@ -1,9 +1,5 @@
 127.0.0.1 localhost
 
-%{ for index, ip in clickhouse_ips }
-${ip} clickhouse-${index}
-%{ endfor }
-
 %{ for index, ip in monitoring_ips }
 ${ip} monitoring-${index}
 %{ endfor }
