@@ -17,8 +17,8 @@
     - monitoring/blackbox_exporter
     - monitoring/victoria_metrics
     - monitoring/victoria_metrics/alert_rules
-    - monitoring/victori_metrics/vmagent_data
-    - monitoring/victori_metrics/victoria_metrics_data
+    - monitoring/victoria_metrics/vmagent_data
+    - monitoring/victoria_metrics/victoria_metrics_data
     - monitoring/alert_manager
     - monitoring/grafana
 
